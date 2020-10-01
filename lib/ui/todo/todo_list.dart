@@ -20,7 +20,7 @@ class TodoList extends StatelessWidget {
                   'Menu',
                   style: TextStyle(fontSize: 36, color: Colors.white),
                 ),
-                decoration: BoxDecoration(color: Colors.blueAccent),
+                decoration: BoxDecoration(color: Colors.blue),
               ),
             ),
             Card(
