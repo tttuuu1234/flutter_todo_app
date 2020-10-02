@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:todo_app/domain/todo_domain.dart';
+import 'package:todo_app/ui/todo/complete.dart';
+import 'package:todo_app/ui/todo/incomplete.dart';
 
 class TodoList extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  // finalを付けないと警告が出る
-  // でもfinalをつけるとこのファイルはstatelesswidgeだから_todoの値の変更はできないよと言われる
-  // だらかこのファイルをstatefullに変えて、setstateで値のfinalの定数の値を更新できるようにしてあげる
-  // でもそれは面倒だから、EntityModelとProviderを用意して
-  // EntityModelの定義したfinalのtodoの値を更新して、providerでその変更を受け取れるようにして、TodoListsページに表示させる感じかな？
 
   @override
   Widget build(BuildContext context) {
@@ -116,19 +114,15 @@ class TodoList extends StatelessWidget {
               ),
               Card(
                 child: ListTile(
-                  title: Text('TodoLists'),
-                  onTap: () {
-                    print('TodoListsページに遷移');
-                    // todo TodoListsページに遷移させる
-                  },
-                ),
-              ),
-              Card(
-                child: ListTile(
                   title: Text('Incomplete'),
                   onTap: () {
-                    print('未完了ページに遷移');
-                    // todo Incompleteページに遷移させる
+                    // 未完了ページに飛ぶ前にDrawerを閉じている
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => TodoIncomplete(),
+                      ),
+                    );
                   },
                 ),
               ),
@@ -136,8 +130,13 @@ class TodoList extends StatelessWidget {
                 child: ListTile(
                   title: Text('Complete'),
                   onTap: () {
-                    print('完了ページに遷移');
-                    // todo Completeページに遷移させる
+                    // 完了ページに飛ぶ前にDrawerを閉じている
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => TodoComplete(),
+                      ),
+                    );
                   },
                 ),
               )

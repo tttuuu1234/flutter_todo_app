@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class TodoDomain extends ChangeNotifier {
   String todo;
-  List todos = ['aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'];
+  List todos = ['今日はFlutterのお勉強をします。目標はTodoアプリの完成です。頑張ります。応援して下さい。'];
 
   void addTodo() {
     if (todo.isEmpty) {
