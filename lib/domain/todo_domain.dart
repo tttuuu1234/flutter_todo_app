@@ -25,4 +25,10 @@ class TodoDomain extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void deleteTodo(int index) {
+    todos.removeAt(index);
+
+    notifyListeners();
+  }
 }

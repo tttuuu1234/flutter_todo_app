@@ -88,58 +88,99 @@ class TodoList extends StatelessWidget {
                       style: TextStyle(fontSize: 14),
                     ),
                     contentPadding: EdgeInsets.all(8),
-                    trailing: IconButton(
-                      icon: Icon(Icons.edit),
-                      color: Colors.lightBlueAccent,
-                      onPressed: () {
-                        print('編集');
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text(
-                                '追加したTodo間違えちゃった？',
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              content: Form(
-                                key: _formKey,
-                                child: TextFormField(
-                                  initialValue: model.todos[index],
-                                  // ignore: missing_return
-                                  validator: (value) {
-                                    if (value.isEmpty) {
-                                      return '今日する事教えてくれないの。。？';
-                                    }
-                                  },
-                                  onChanged: (String text) {
-                                    model.todo = text;
-                                  },
-                                ),
-                              ),
-                              // AlertDialogではボタン関係はactionsで定義しなくてはいけない
-                              actions: <Widget>[
-                                FlatButton(
-                                  child: Text('OK'),
-                                  onPressed: () {
-                                    if (_formKey.currentState.validate()) {
-                                      _formKey.currentState
-                                          .save(); // TextFormFieldのonSavedが呼び出される
-                                    }
-                                    try {
-                                      // todoの追加
-                                      model.editTodo(index);
-                                      // TodoListsページに戻って、dialogを閉じる
-                                      Navigator.pop(context);
-                                    } catch (e) {
-                                      print('今日する事が入力されていません');
-                                    }
-                                  },
-                                ),
-                              ],
+                    // ListTileのtrailingに2つアイコンを並べたい時はWrapしてあげる
+                    trailing: Wrap(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text(
+                                    '追加したTodo間違えちゃった？',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  content: Form(
+                                    key: _formKey,
+                                    child: TextFormField(
+                                      initialValue: model.todos[index],
+                                      // ignore: missing_return
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return '今日する事教えてくれないの。。？';
+                                        }
+                                      },
+                                      onChanged: (String text) {
+                                        model.todo = text;
+                                      },
+                                    ),
+                                  ),
+                                  // AlertDialogではボタン関係はactionsで定義しなくてはいけない
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text('OK'),
+                                      onPressed: () {
+                                        if (_formKey.currentState.validate()) {
+                                          _formKey.currentState
+                                              .save(); // TextFormFieldのonSavedが呼び出される
+                                        }
+                                        try {
+                                          // todoの追加
+                                          model.editTodo(index);
+                                          // TodoListsページに戻って、dialogを閉じる
+                                          Navigator.pop(context);
+                                        } catch (e) {
+                                          print('今日する事が入力されていません');
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
                             );
                           },
-                        );
-                      },
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.redAccent,
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '本当に削除しますか？',
+                                      style: TextStyle(fontSize: 16),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  actions: [
+                                    FlatButton(
+                                      onPressed: () {
+                                        model.deleteTodo(index);
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                    FlatButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('NG'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 );
