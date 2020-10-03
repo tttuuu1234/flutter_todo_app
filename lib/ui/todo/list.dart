@@ -35,6 +35,9 @@ class TodoList extends StatelessWidget {
                           content: Form(
                             key: _formKey,
                             child: TextFormField(
+                              // 複数行入力できるようにしている
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
                               // ignore: missing_return
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -84,7 +87,7 @@ class TodoList extends StatelessWidget {
                 return Card(
                   child: ListTile(
                     title: Text(
-                      model.todos[index],
+                      model.todos[index]['text'],
                       style: TextStyle(fontSize: 14),
                     ),
                     contentPadding: EdgeInsets.all(8),
@@ -105,7 +108,9 @@ class TodoList extends StatelessWidget {
                                   content: Form(
                                     key: _formKey,
                                     child: TextFormField(
-                                      initialValue: model.todos[index],
+                                      keyboardType: TextInputType.multiline,
+                                      maxLines: null,
+                                      initialValue: model.todos[index]['text'],
                                       // ignore: missing_return
                                       validator: (value) {
                                         if (value.isEmpty) {
