@@ -15,6 +15,10 @@ class TodoList extends StatelessWidget {
     }
   }
 
+  void verification(bool isCompleted) {
+    if (isCompleted) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<TodoDomain>(
@@ -102,37 +106,39 @@ class TodoList extends StatelessWidget {
                       ),
                       contentPadding: EdgeInsets.all(8),
                       onLongPress: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '完了しましたか？',
-                                  style: TextStyle(fontSize: 14),
-                                  textAlign: TextAlign.center,
+                        if (!model.todos[index]['isCompleted']) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    '完了しましたか？',
+                                    style: TextStyle(fontSize: 14),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                              ),
-                              // AlertDialogではボタン関係はactionsで定義しなくてはいけない
-                              actions: [
-                                FlatButton(
-                                  onPressed: () {
-                                    model.completeTodo(index);
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('OK'),
-                                ),
-                                FlatButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('NG'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                                // AlertDialogではボタン関係はactionsで定義しなくてはいけない
+                                actions: [
+                                  FlatButton(
+                                    onPressed: () {
+                                      model.completeTodo(index);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('OK'),
+                                  ),
+                                  FlatButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('NG'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
                       },
                       // ListTileのtrailingに2つアイコンを並べたい時はWrapしてあげる
                       trailing: Wrap(
@@ -262,9 +268,11 @@ class TodoList extends StatelessWidget {
                     onTap: () {
                       // 未完了ページに飛ぶ前にDrawerを閉じている
                       Navigator.of(context).pop();
+                      List incompleteTodos = model.getIncompleteTodos();
+                      print(incompleteTodos);
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => TodoIncomplete(),
+                          builder: (context) => TodoIncomplete(incompleteTodos),
                         ),
                       );
                     },
@@ -276,10 +284,10 @@ class TodoList extends StatelessWidget {
                     onTap: () {
                       // 完了ページに飛ぶ前にDrawerを閉じている
                       Navigator.of(context).pop();
-                      List completeTodo = model.getCompleteTodo();
+                      List completeTodos = model.getCompleteTodo();
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => TodoComplete(completeTodo),
+                          builder: (context) => TodoComplete(completeTodos),
                         ),
                       );
                     },

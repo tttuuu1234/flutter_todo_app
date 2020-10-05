@@ -9,6 +9,7 @@ class TodoDomain extends ChangeNotifier {
     }
   ];
   var completeTodos = [];
+  var incompleteTodos = [];
 
   void addTodo() {
     if (todo.isEmpty) {
@@ -22,8 +23,6 @@ class TodoDomain extends ChangeNotifier {
     todos.add(todoData);
     // 状態をなくしている 無くさないと追加ボタンとか押した時にtodoに前に入力したデータが残ってちゃう
     todo = null;
-
-    print(todos);
 
     // notifyListeners()でTodoDomainが使用されているChangeNotifyProviderに変更を通知
     notifyListeners();
@@ -64,14 +63,17 @@ class TodoDomain extends ChangeNotifier {
     return completeTodos;
   }
 
-  // List getIncompleteTodos() {
-  //   for (var i = 0; i < todos.length; i++) {
-  //     var data = todos[i];
-  //     if (data['isCompleted']) {
+  List getIncompleteTodos() {
+    incompleteTodos.clear();
+    for (var i = 0; i < todos.length; i++) {
+      var data = todos[i];
+      if (!data['isCompleted']) {
+        incompleteTodos.add(data);
+      }
+    }
 
-  //     }
-  //   }
+    print(incompleteTodos);
 
-  //   return
-  // }
+    return incompleteTodos;
+  }
 }
