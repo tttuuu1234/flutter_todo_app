@@ -15,10 +15,6 @@ class TodoList extends StatelessWidget {
     }
   }
 
-  void verification(bool isCompleted) {
-    if (isCompleted) {}
-  }
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<TodoDomain>(
@@ -248,55 +244,57 @@ class TodoList extends StatelessWidget {
             );
           },
         ),
-        drawer: Consumer<TodoDomain>(builder: (context, model, child) {
-          return Drawer(
-            child: ListView(
-              children: <Widget>[
-                SizedBox(
-                  height: 80,
-                  child: DrawerHeader(
-                    child: Text(
-                      'Menu',
-                      style: TextStyle(fontSize: 36, color: Colors.white),
+        drawer: Consumer<TodoDomain>(
+          builder: (context, model, child) {
+            return Drawer(
+              child: ListView(
+                children: <Widget>[
+                  SizedBox(
+                    height: 80,
+                    child: DrawerHeader(
+                      child: Text(
+                        'Menu',
+                        style: TextStyle(fontSize: 36, color: Colors.white),
+                      ),
+                      decoration: BoxDecoration(color: Colors.blue),
                     ),
-                    decoration: BoxDecoration(color: Colors.blue),
                   ),
-                ),
-                Card(
-                  child: ListTile(
-                    title: Text('Incomplete'),
-                    onTap: () {
-                      // 未完了ページに飛ぶ前にDrawerを閉じている
-                      Navigator.of(context).pop();
-                      List incompleteTodos = model.getIncompleteTodos();
-                      print(incompleteTodos);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => TodoIncomplete(incompleteTodos),
-                        ),
-                      );
-                    },
+                  Card(
+                    child: ListTile(
+                      title: Text('Incomplete'),
+                      onTap: () {
+                        // 未完了ページに飛ぶ前にDrawerを閉じている
+                        Navigator.of(context).pop();
+                        List incompleteTodos = model.getIncompleteTodos();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                TodoIncomplete(incompleteTodos),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-                Card(
-                  child: ListTile(
-                    title: Text('Complete'),
-                    onTap: () {
-                      // 完了ページに飛ぶ前にDrawerを閉じている
-                      Navigator.of(context).pop();
-                      List completeTodos = model.getCompleteTodo();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => TodoComplete(completeTodos),
-                        ),
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
-          );
-        }),
+                  Card(
+                    child: ListTile(
+                      title: Text('Complete'),
+                      onTap: () {
+                        // 完了ページに飛ぶ前にDrawerを閉じている
+                        Navigator.of(context).pop();
+                        List completeTodos = model.getCompleteTodo();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => TodoComplete(completeTodos),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

@@ -12,19 +12,20 @@ class TodoIncomplete extends StatelessWidget {
         title: Text('TodoIncomplete'),
       ),
       body: ListView.builder(
-          itemCount: incompleteTodo.length,
-          // ignore: missing_return
-          itemBuilder: (context, index) {
-            return Card(
-              child: ListTile(
-                title: Text(
-                  incompleteTodo[index]['text'],
-                  style: TextStyle(fontSize: 14),
-                ),
-                contentPadding: EdgeInsets.all(8),
+        itemCount: incompleteTodo.length,
+        // ignore: missing_return
+        itemBuilder: (context, index) {
+          return Card(
+            child: ListTile(
+              title: Text(
+                incompleteTodo[index]['text'],
+                style: TextStyle(fontSize: 14),
               ),
-            );
-          }),
+              contentPadding: EdgeInsets.all(8),
+            ),
+          );
+        },
+      ),
     );
   }
 }
