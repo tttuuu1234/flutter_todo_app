@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 
 class TodoDomain extends ChangeNotifier {
   String todo;
-  List todos = [
-    {
-      'isCompleted': false,
-      'text': '今日はFlutterのお勉強をします。目標はTodoアプリの完成です。頑張ります。応援して下さい。'
-    }
-  ];
+  List todos = [];
   var completeTodos = [];
   var incompleteTodos = [];
 

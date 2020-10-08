@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/domain/firebase_todo_domain.dart';
 
 class TodoComplete extends StatelessWidget {
-  TodoComplete(this.completeTodo);
-
-  final List completeTodo;
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('TodoComplete'),
-      ),
-      body: ListView.builder(
-        itemCount: completeTodo.length,
-        // ignore: missing_return
-        itemBuilder: (context, index) {
-          return Card(
-            child: ListTile(
-              title: Text(
-                completeTodo[index]['text'],
-                style: TextStyle(fontSize: 14),
-              ),
-              contentPadding: EdgeInsets.all(8),
-            ),
-          );
-        },
+    return ChangeNotifierProvider<FirebaseTodoDomain>(
+      create: (_) => FirebaseTodoDomain()..getCompleteTodos(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('TodoIncomplete'),
+        ),
+        body: Consumer<FirebaseTodoDomain>(
+          builder: (context, model, child) {
+            final completeTodos = model.completeTodos;
+            final listTiles = completeTodos
+                .map(
+                  (completeTodo) => ListTile(
+                    title: Text(completeTodo.text),
+                  ),
+                )
+                .toList();
+            return ListView(
+              children: listTiles,
+            );
+          },
+        ),
       ),
     );
   }
