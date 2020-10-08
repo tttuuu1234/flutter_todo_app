@@ -9,17 +9,21 @@ class TodoIncomplete extends StatelessWidget {
       create: (_) => FirebaseTodoDomain()..getIncompleteTodos(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('TodoIncomplete'),
+          title: Text('IncompleteTodo'),
         ),
         body: Consumer<FirebaseTodoDomain>(builder: (context, model, child) {
           final incompleteTodos = model.incompleteTodos;
-          final listTiles = incompleteTodos.map(
-            (incompleteTodo) => ListTile(
-              title: Text(incompleteTodo.text),
-            ),
+          final cards = incompleteTodos.map(
+            (incompleteTodo) => Card(
+              child: Container(
+                child: ListTile(
+                  title: Text(incompleteTodo.text),
+                ),
+              ),
+            )
           ).toList();
           return ListView(
-            children: listTiles,
+            children: cards,
           );
         },),
       ),
