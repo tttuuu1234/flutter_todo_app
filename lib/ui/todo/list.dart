@@ -47,7 +47,7 @@ class TodoList extends StatelessWidget {
                                   return '今日する事教えてくれないの。。？';
                                 }
                               },
-                              onChanged: (String text) {
+                              onChanged: (String text) async {
                                 model.todo = text;
                               },
                             ),
@@ -55,13 +55,13 @@ class TodoList extends StatelessWidget {
                           actions: <Widget>[
                             FlatButton(
                               child: Text('OK'),
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState.validate()) {
                                   _formKey.currentState.save();
                                 }
                                 try {
                                   // todoの追加
-                                  model.addTodo();
+                                  await model.addTodo();
                                   Navigator.pop(context);
                                 } catch (e) {
                                   print('今日する事が入力されていません');
@@ -109,8 +109,8 @@ class TodoList extends StatelessWidget {
                                   // AlertDialogではボタン関係はactionsで定義しなくてはいけない
                                   actions: [
                                     FlatButton(
-                                      onPressed: () {
-                                        model.completeTodo(id: todo.id);
+                                      onPressed: () async {
+                                        await model.completeTodo(id: todo.id);
                                         Navigator.of(context).pop();
                                       },
                                       child: Text('OK'),
@@ -150,12 +150,13 @@ class TodoList extends StatelessWidget {
                                           // ignore: missing_return
                                           validator: (value) {
                                             if (value.isEmpty) {
+                                              print(value);
                                               return '今日する事教えてくれないの。。？';
                                             }
                                           },
                                           onChanged: (String text) {
+                                            print(text);
                                             model.todo = text;
-                                            print(model.todo);
                                           },
                                         ),
                                       ),
@@ -163,23 +164,22 @@ class TodoList extends StatelessWidget {
                                       actions: <Widget>[
                                         FlatButton(
                                           child: Text('OK'),
-                                          onPressed: () {
+                                          onPressed: () async {
                                             if (_formKey.currentState
                                                 .validate()) {
-                                              _formKey.currentState
-                                                  .save(); // TextFormFieldのonSavedが呼び出される
+                                              _formKey.currentState.save();
                                             }
+                                            print(model.todo);
+
                                             try {
                                               // todoの追加
-                                              model.updateTodoText(
-                                                  id: todo.id, text: model.todo);
+                                              await model.updateTodoText(
+                                                  id: todo.id,
+                                                  text: model.todo);
                                               // TodoListsページに戻って、dialogを閉じる
                                               Navigator.pop(context);
                                             } catch (e) {
                                               print('今日する事が入力されていません');
-                                              if (model.todo == null) {
-                                                Navigator.of(context).pop();
-                                              }
                                             }
                                           },
                                         ),
@@ -209,8 +209,8 @@ class TodoList extends StatelessWidget {
                                       ),
                                       actions: [
                                         FlatButton(
-                                          onPressed: () {
-                                            model.deleteTodo(id: todo.id);
+                                          onPressed: () async {
+                                            await model.deleteTodo(id: todo.id);
                                             Navigator.of(context).pop();
                                           },
                                           child: Text('OK'),

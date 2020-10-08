@@ -12,4 +12,5 @@ class TodoEntity {
   String text;
   bool isCompleted;
   Timestamp createdAt;
+  // Timestamp
 }

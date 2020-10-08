@@ -9,11 +9,12 @@ class FirebaseTodoDomain extends ChangeNotifier {
   List<TodoEntity> incompleteTodos = [];
   List<TodoEntity> completeTodos = [];
 
-  final todoCollection = FirebaseFirestore.instance.collection('todos');
+  // todosコレクション
+  final todosCollection = FirebaseFirestore.instance.collection('todos');
 
   // todoの取得
   Future getTodos() async {
-    final todos = await todoCollection.orderBy('createdAt').get();
+    final todos = await todosCollection.orderBy('createdAt').get();
 
     final listTodos = todos.docs
         .map(
@@ -27,33 +28,44 @@ class FirebaseTodoDomain extends ChangeNotifier {
 
   // todoの追加
   Future addTodo() async {
-    await todoCollection.add(
+    if (todo.isEmpty) {
+      return;
+    }
+    await todosCollection.add(
       {'text': todo, 'isCompleted': false, 'createdAt': DateTime.now()},
     );
-    print('追加成功 ' + todo);
+
+    todo = null;
 
     this.getTodos();
   }
 
   // textの更新
   Future updateTodoText({String id, String text}) async {
-    await todoCollection.doc(id).update(
+    if (todo.isEmpty) {
+      return;
+    }
+
+    await todosCollection.doc(id).update(
       {'text': text},
     );
+
+    todo = null;
 
     this.getTodos();
   }
 
   // todoの削除
   Future deleteTodo({String id}) async {
-    await todoCollection.doc(id).delete();
+    await todosCollection.doc(id).delete();
 
     this.getTodos();
+    print('削除に失敗しました。');
   }
 
   // todoを完了状態に更新
   Future completeTodo({String id}) async {
-    await todoCollection.doc(id).update(
+    await todosCollection.doc(id).update(
       {'isCompleted': true},
     );
 
@@ -63,7 +75,7 @@ class FirebaseTodoDomain extends ChangeNotifier {
   // 未完了のtodoの取得
   Future getIncompleteTodos() async {
     final incompleteTodos =
-        await todoCollection.where('isCompleted', isEqualTo: false).get();
+        await todosCollection.where('isCompleted', isEqualTo: false).get();
 
     final todoLists = incompleteTodos.docs
         .map(
@@ -77,7 +89,7 @@ class FirebaseTodoDomain extends ChangeNotifier {
   // 完了済みのtodoの取得
   Future getCompleteTodos() async {
     final completeTodos =
-        await todoCollection.where('isCompleted', isEqualTo: true).get();
+        await todosCollection.where('isCompleted', isEqualTo: true).get();
 
     final todoLists = completeTodos.docs
         .map(
