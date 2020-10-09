@@ -5,12 +5,13 @@ class TodoEntity {
     id = doc.id;
     text = doc.data()['text'];
     isCompleted = doc.data()['isCompleted'];
-    createdAt = doc.get('createdAt');
-    print(createdAt.toDate());
+    createdAt = doc.data()['createdAt'];
+    updatedAt = doc.data()['updatedAt'];
   }
 
   String id;
   String text;
   bool isCompleted;
   Timestamp createdAt;
+  Timestamp updatedAt;
 }

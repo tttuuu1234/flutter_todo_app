@@ -32,7 +32,12 @@ class FirebaseTodoDomain extends ChangeNotifier {
       return;
     }
     await todosCollection.add(
-      {'text': todo, 'isCompleted': false, 'createdAt': DateTime.now()},
+      {
+        'text': todo,
+        'isCompleted': false,
+        'createdAt': DateTime.now(),
+        'updatedAt': DateTime.now()
+      },
     );
 
     todo = null;
@@ -107,8 +112,8 @@ class FirebaseTodoDomain extends ChangeNotifier {
     }
   }
 
-  // todo登録日付をformatして取得
-  String getFormatedDate(DateTime date) {
-    return "${date.year}年 ${date.month}月${date.day}日 ${date.hour}時${date.minute}分";
+  // formatした登録日付とtodo内容を取得
+  String getText({DateTime date, String text}) {
+    return "${date.year}年 ${date.month}月${date.day}日 ${date.hour}時${date.minute}分\n$text";
   }
 }
