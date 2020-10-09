@@ -52,7 +52,10 @@ class FirebaseTodoDomain extends ChangeNotifier {
     }
 
     await todosCollection.doc(id).update(
-      {'text': text},
+      {
+        'text': text,
+        'updatedAt': DateTime.now(),
+      },
     );
 
     todo = null;
@@ -70,7 +73,7 @@ class FirebaseTodoDomain extends ChangeNotifier {
   // todoを完了状態に更新
   Future completeTodo({String id}) async {
     await todosCollection.doc(id).update(
-      {'isCompleted': true},
+      {'isCompleted': true, 'updatedAt': DateTime.now()},
     );
 
     this.getTodos();

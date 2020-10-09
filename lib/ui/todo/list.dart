@@ -81,7 +81,8 @@ class TodoList extends StatelessWidget {
                       color: model.getAmeberColor(todo.isCompleted),
                       child: ListTile(
                         title: Text(
-                          model.getText(date: todo.createdAt.toDate(), text: todo.text),
+                          model.getText(
+                              date: todo.createdAt.toDate(), text: todo.text),
                           style: TextStyle(fontSize: 14),
                         ),
                         contentPadding: EdgeInsets.all(8),

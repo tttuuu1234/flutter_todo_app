@@ -19,7 +19,11 @@ class TodoIncomplete extends StatelessWidget {
                   (incompleteTodo) => Card(
                     child: Container(
                       child: ListTile(
-                        title: Text(incompleteTodo.text),
+                        title: Text(
+                          model.getText(
+                              date: incompleteTodo.updatedAt.toDate(),
+                              text: incompleteTodo.text),
+                        ),
                       ),
                     ),
                   ),
