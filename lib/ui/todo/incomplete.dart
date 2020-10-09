@@ -15,13 +15,15 @@ class TodoIncomplete extends StatelessWidget {
           builder: (context, model, child) {
             final incompleteTodos = model.incompleteTodos;
             final cards = incompleteTodos
-                .map((incompleteTodo) => Card(
-                      child: Container(
-                        child: ListTile(
-                          title: Text(incompleteTodo.text),
-                        ),
+                .map(
+                  (incompleteTodo) => Card(
+                    child: Container(
+                      child: ListTile(
+                        title: Text(incompleteTodo.text),
                       ),
-                    ))
+                    ),
+                  ),
+                )
                 .toList();
             return ListView(
               children: cards,

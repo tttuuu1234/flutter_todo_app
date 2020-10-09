@@ -175,7 +175,8 @@ class TodoList extends StatelessWidget {
                                               // todoの追加
                                               await model.updateTodoText(
                                                   id: todo.id,
-                                                  text: model.todo);
+                                                  text: model.todo
+                                              );
                                               // TodoListsページに戻って、dialogを閉じる
                                               Navigator.pop(context);
                                             } catch (e) {

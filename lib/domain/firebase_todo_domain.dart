@@ -60,7 +60,6 @@ class FirebaseTodoDomain extends ChangeNotifier {
     await todosCollection.doc(id).delete();
 
     this.getTodos();
-    print('削除に失敗しました。');
   }
 
   // todoを完了状態に更新
