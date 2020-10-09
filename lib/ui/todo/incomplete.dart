@@ -21,8 +21,9 @@ class TodoIncomplete extends StatelessWidget {
                       child: ListTile(
                         title: Text(
                           model.getText(
-                              date: incompleteTodo.createdAt.toDate(),
-                              text: incompleteTodo.text),
+                            date: incompleteTodo.createdAt.toDate(),
+                            text: incompleteTodo.text,
+                          ),
                         ),
                       ),
                     ),
