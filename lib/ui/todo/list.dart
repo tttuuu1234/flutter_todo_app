@@ -8,13 +8,6 @@ import 'incomplete.dart';
 class TodoList extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
-  // ignore: missing_return
-  Color getColor(bool isCompleted) {
-    if (isCompleted) {
-      return Colors.amber;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<FirebaseTodoDomain>(
@@ -85,12 +78,14 @@ class TodoList extends StatelessWidget {
                 .map(
                   (todo) => Card(
                     child: Container(
-                      color: getColor(todo.isCompleted),
+                      color: model.getAmeberColor(todo.isCompleted),
                       child: ListTile(
                         title: Text(
-                          todo.text,
+                          model.getFormatedDate(todo.createdAt.toDate()),
                           style: TextStyle(fontSize: 14),
                         ),
+
+                        subtitle: Text(todo.text),
                         contentPadding: EdgeInsets.all(8),
                         onLongPress: () {
                           if (!todo.isCompleted) {
@@ -175,8 +170,7 @@ class TodoList extends StatelessWidget {
                                               // todoの追加
                                               await model.updateTodoText(
                                                   id: todo.id,
-                                                  text: model.todo
-                                              );
+                                                  text: model.todo);
                                               // TodoListsページに戻って、dialogを閉じる
                                               Navigator.pop(context);
                                             } catch (e) {

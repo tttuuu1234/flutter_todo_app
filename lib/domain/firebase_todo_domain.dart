@@ -98,4 +98,17 @@ class FirebaseTodoDomain extends ChangeNotifier {
     this.completeTodos = todoLists;
     notifyListeners();
   }
+
+  // 完了済み火識別できる色の取得
+  // ignore: missing_return
+  Color getAmeberColor(bool isCompleted) {
+    if (isCompleted) {
+      return Colors.amber;
+    }
+  }
+
+  // todo登録日付をformatして取得
+  String getFormatedDate(DateTime date) {
+    return "${date.year}年 ${date.month}月${date.day}日 ${date.hour}時${date.minute}分";
+  }
 }

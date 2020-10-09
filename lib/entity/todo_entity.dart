@@ -5,7 +5,8 @@ class TodoEntity {
     id = doc.id;
     text = doc.data()['text'];
     isCompleted = doc.data()['isCompleted'];
-    createdAt = doc.data()['createdAt'];
+    createdAt = doc.get('createdAt');
+    print(createdAt.toDate());
   }
 
   String id;
