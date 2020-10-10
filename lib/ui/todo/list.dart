@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todo_app/domain/firebase_todo_domain.dart';
+import 'package:todo_app/domain/todo_domain.dart';
 
 import 'complete.dart';
 import 'incomplete.dart';
@@ -10,13 +10,13 @@ class TodoList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<FirebaseTodoDomain>(
-      create: (_) => FirebaseTodoDomain()..getTodos(),
+    return ChangeNotifierProvider<TodoDomain>(
+      create: (_) => TodoDomain()..getTodos(),
       child: Scaffold(
         appBar: AppBar(
           title: Text('TodoLists'),
           actions: <Widget>[
-            Consumer<FirebaseTodoDomain>(
+            Consumer<TodoDomain>(
               builder: (context, model, child) {
                 return IconButton(
                   icon: Icon(Icons.add),
@@ -71,7 +71,7 @@ class TodoList extends StatelessWidget {
             )
           ],
         ),
-        body: Consumer<FirebaseTodoDomain>(
+        body: Consumer<TodoDomain>(
           builder: (context, model, child) {
             final todos = model.todos;
             final cards = todos
@@ -233,7 +233,7 @@ class TodoList extends StatelessWidget {
             );
           },
         ),
-        drawer: Consumer<FirebaseTodoDomain>(
+        drawer: Consumer<TodoDomain>(
           builder: (context, model, child) {
             return Drawer(
               child: ListView(

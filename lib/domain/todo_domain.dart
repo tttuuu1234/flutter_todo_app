@@ -1,75 +1,122 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import '../entity/todo_entity.dart';
 
 class TodoDomain extends ChangeNotifier {
   String todo;
-  List todos = [];
-  var completeTodos = [];
-  var incompleteTodos = [];
+  List<TodoEntity> todos = [];
+  List<TodoEntity> incompleteTodos = [];
+  List<TodoEntity> completeTodos = [];
 
-  // todoの追加
-  void addTodo() {
-    if (todo.isEmpty) {
-      return;
-    }
-    // todosに連想配列を追加するため
-    Map todoData = {'isCompleted': false, 'text': todo};
-    // todosの配列にt連想配列のtodoDataを追加
-    todos.add(todoData);
-    // 状態をなくしている 無くさないと追加ボタンとか押した時にtodoに前に入力したデータが残ってちゃう
-    todo = null;
-    // notifyListeners()でTodoDomainが使用されているChangeNotifyProviderに変更を通知
+  // todosコレクション
+  final todosCollection = FirebaseFirestore.instance.collection('todos');
+
+  // todoの取得
+  Future getTodos() async {
+    final todos = await todosCollection.orderBy('createdAt').get();
+
+    final listTodos = todos.docs
+        .map(
+          (doc) => TodoEntity(doc),
+        )
+        .toList();
+
+    this.todos = listTodos;
     notifyListeners();
   }
 
-  // todoの編集
-  void editTodo(int index) {
+  // todoの追加
+  Future addTodo() async {
     if (todo.isEmpty) {
       return;
     }
-    // 編集されたtodosの中のtodoのindexを引数でもらって、todosの中のindex番号のtodoを編集したtodoに書き換えている
-    todos[index]['text'] = todo;
+    await todosCollection.add(
+      {
+        'text': todo,
+        'isCompleted': false,
+        'createdAt': DateTime.now(),
+        'updatedAt': DateTime.now()
+      },
+    );
+
     todo = null;
 
-    notifyListeners();
+    this.getTodos();
+  }
+
+  // textの更新
+  Future updateTodoText({String id, String text}) async {
+    if (todo.isEmpty) {
+      return;
+    }
+
+    await todosCollection.doc(id).update(
+      {
+        'text': text,
+        'updatedAt': DateTime.now(),
+      },
+    );
+
+    todo = null;
+
+    this.getTodos();
   }
 
   // todoの削除
-  void deleteTodo(int index) {
-    todos.removeAt(index);
+  Future deleteTodo({String id}) async {
+    await todosCollection.doc(id).delete();
 
-    notifyListeners();
+    this.getTodos();
   }
 
   // todoを完了状態に更新
-  void completeTodo(int index) {
-    todos[index]['isCompleted'] = true;
+  Future completeTodo({String id}) async {
+    await todosCollection.doc(id).update(
+      {'isCompleted': true, 'updatedAt': DateTime.now()},
+    );
 
+    this.getTodos();
+  }
+
+  // 未完了のtodoの取得
+  Future getIncompleteTodos() async {
+    final incompleteTodos =
+        await todosCollection.where('isCompleted', isEqualTo: false).get();
+
+    final todoLists = incompleteTodos.docs
+        .map(
+          (todo) => TodoEntity(todo),
+        )
+        .toList();
+    this.incompleteTodos = todoLists;
     notifyListeners();
   }
 
   // 完了済みのtodoの取得
-  List getCompleteTodo() {
-    completeTodos.clear();
-    for (var i = 0; i < todos.length; i++) {
-      var data = todos[i];
-      if (data['isCompleted']) {
-        completeTodos.add(data);
-      }
-    }
+  Future getCompleteTodos() async {
+    final completeTodos =
+        await todosCollection.where('isCompleted', isEqualTo: true).get();
 
-    return completeTodos;
+    final todoLists = completeTodos.docs
+        .map(
+          (todo) => TodoEntity(todo),
+        )
+        .toList();
+    this.completeTodos = todoLists;
+    notifyListeners();
   }
 
-  // 未完了のtodoの取得
-  List getIncompleteTodos() {
-    incompleteTodos.clear();
-    for (var i = 0; i < todos.length; i++) {
-      var data = todos[i];
-      if (!data['isCompleted']) {
-        incompleteTodos.add(data);
-      }
+  // 完了済み火識別できる色の取得
+  // ignore: missing_return
+  Color getAmeberColor(bool isCompleted) {
+    if (isCompleted) {
+      return Colors.amber;
     }
+  }
 
-    return incompleteTodos;
+  // formatした登録日付とtodo内容を取得
+  String getText({DateTime date, String text}) {
+    return "${date.year}年 ${date.month}月${date.day}日 ${date.hour}時${date.minute}分\n$text";
   }
 }
