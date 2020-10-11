@@ -109,7 +109,7 @@ class TodoDomain extends ChangeNotifier {
 
   // 完了済み火識別できる色の取得
   // ignore: missing_return
-  Color getAmeberColor(bool isCompleted) {
+  Color getCompletedColor(bool isCompleted) {
     if (isCompleted) {
       return Colors.amber;
     }

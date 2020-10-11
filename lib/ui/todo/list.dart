@@ -78,11 +78,13 @@ class TodoList extends StatelessWidget {
                 .map(
                   (todo) => Card(
                     child: Container(
-                      color: model.getAmeberColor(todo.isCompleted),
+                      color: model.getCompletedColor(todo.isCompleted),
                       child: ListTile(
                         title: Text(
                           model.getText(
-                              date: todo.createdAt.toDate(), text: todo.text),
+                            date: todo.createdAt.toDate(),
+                            text: todo.text,
+                          ),
                           style: TextStyle(fontSize: 14),
                         ),
                         contentPadding: EdgeInsets.all(8),
@@ -144,12 +146,10 @@ class TodoList extends StatelessWidget {
                                           // ignore: missing_return
                                           validator: (value) {
                                             if (value.isEmpty) {
-                                              print(value);
                                               return '今日する事教えてくれないの。。？';
                                             }
                                           },
                                           onChanged: (String text) {
-                                            print(text);
                                             model.todo = text;
                                           },
                                         ),
@@ -163,7 +163,6 @@ class TodoList extends StatelessWidget {
                                                 .validate()) {
                                               _formKey.currentState.save();
                                             }
-                                            print(model.todo);
 
                                             try {
                                               // todoの追加
